@@ -1,6 +1,6 @@
 # learning_log
 
-django v:2.1
+Django version 2.2.1
 
-python v:3.5
+Python 3.5
 
