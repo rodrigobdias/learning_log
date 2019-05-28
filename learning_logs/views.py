@@ -6,7 +6,7 @@ from django.urls import reverse
 # Create your views here.
 
 from .models import Topic
-from .forms import TopicForm
+from .forms import TopicForm, EntryForm
 
 def index(request):
     """A página inicial de Learning Log"""
@@ -39,3 +39,23 @@ def new_topic(request):
 
     context = {'form': form}
     return render(request, 'learning_logs/new_topic.html', context)
+
+def new_entry(request, topic_id):
+    """Acrescenta uma nova entrada para um assunto em particular."""
+    topic = Topic.objects.get(id=topic_id)
+
+    if request.method != 'POST':
+        # Nenhum dado submetido; cria um formulário em branco
+        form = EntryForm()
+    else:
+        # Dados de POST submetidos; processa os dados
+        form = EntryForm(data=request.POST)
+        if form.is_valid():
+            new_entry = form.save(commit=False)
+            new_entry.topic = topic
+            new_entry.save()
+            return HttpResponseRedirect(reverse('learning_logs:topic', args=[topic_id]))
+
+    context = {'topic': topic, 'form': form}
+    return render(request, 'learning_logs/new_entry.html', context)
+
