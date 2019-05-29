@@ -10,9 +10,11 @@ app_name = 'users'
 
 urlpatterns = [
 	# Página de login.
-    path('login', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
+    path(r'login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     # Página de logout
-    path('logout', views.logout_view, name='logout'),
+    path(r'logout/', views.logout_view, name='logout'),
+    # Página de cadastro
+    path(r'register/', views.register, name='register'),
 ]
 
 
