@@ -17,4 +17,6 @@ urlpatterns = [
     path(r'new_topic/', views.new_topic, name='new_topic'),
     # Página para adicionar uma nova entrada
     re_path(r'^new_entry/(?P<topic_id>\d+)/', views.new_entry, name='new_entry'),
+    # Página para editar uma entrada
+    re_path(r'^edit_entry/(?P<entry_id>\d+)/', views.edit_entry, name='edit_entry'),
 ]
