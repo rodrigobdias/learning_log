@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
@@ -19,8 +19,12 @@ def topics(request):
 
 @login_required
 def topic(request, topic_id):
-    """Mostra um único assunto etodas as suas entradas."""
+    """Mostra um único assunto e todas as suas entradas."""
     topic = Topic.objects.get(id=topic_id)
+    # Garante que o assunto pertence ao usuário atual
+    if topic.owner != request.user:
+        raise Http404
+    
     entries = topic.entry_set.order_by('-date_added')
     context = {'topic': topic, 'entries': entries}
     return render(request, 'learning_logs/topic.html', context)
