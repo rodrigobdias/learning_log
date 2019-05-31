@@ -22,8 +22,7 @@ def topic(request, topic_id):
     """Mostra um único assunto e todas as suas entradas."""
     topic = Topic.objects.get(id=topic_id)
     # Garante que o assunto pertence ao usuário atual
-    if topic.owner != request.user:
-        raise Http404
+    check_topic_owner(request, topic)
 
     entries = topic.entry_set.order_by('-date_added')
     context = {'topic': topic, 'entries': entries}
@@ -39,6 +38,8 @@ def new_topic(request):
         # Dados de POST submetidos; processa os dados
         form = TopicForm(request.POST)
         if form.is_valid():
+            new_topic = form.save(commit=False)
+            new_topic.owner = request.user
             form.save()
             return HttpResponseRedirect(reverse('learning_logs:topics'))
 
@@ -50,6 +51,8 @@ def new_entry(request, topic_id):
     """Acrescenta uma nova entrada para um assunto em particular."""
     topic = Topic.objects.get(id=topic_id)
 
+    check_topic_owner(request, topic)
+    
     if request.method != 'POST':
         # Nenhum dado submetido; cria um formulário em branco
         form = EntryForm()
@@ -71,8 +74,7 @@ def edit_entry(request, entry_id):
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
 
-    if topic.owner != request.user:
-        raise Http404
+    check_topic_owner(request, topic)
 
     if request.method != 'POST':
         # Requisição inicial; preenche previamente o formulário com a entrada atual
@@ -87,3 +89,6 @@ def edit_entry(request, entry_id):
     context = {'entry': entry, 'topic': topic, 'form': form}
     return render(request, 'learning_logs/edit_entry.html', context)
 
+def check_topic_owner(request, topic):
+    if(topic.owner != request.user):
+        raise Http404
