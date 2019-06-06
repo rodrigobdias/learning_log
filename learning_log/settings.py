@@ -143,8 +143,8 @@ if cwd == '/app' or cwd[:4] == '/tmp':
     # Honra o cabeçalho 'X-Forwarded-Proto' para request.is_secure().
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     
-    # Cabeçalhos para permitir todos os hosts
-    ALLOWED_HOSTS = ['*']
+    # Permite que apenas o Heroku seja o host do projeto
+    ALLOWED_HOSTS = ['track-your-learning-br.herokuapp.com']
     DEBUG = False
 
     # Configuração de recursos estático
