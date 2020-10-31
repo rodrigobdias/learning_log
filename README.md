@@ -1,6 +1,6 @@
 # learning_log
 
-Programa do Curso Intensivo de Python:
+Projeto desenvolvido através do curso (Livro) : ‘Curso intensivo de Python’:
 
 Django version 2.2.1
 
